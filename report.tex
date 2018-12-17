@@ -1,0 +1,83 @@
+%++++++++++++++++++++++++++++++++++++++++
+% Don't modify this section unless you know what you're doing!
+%\documentclass[letterpaper,12pt]{article}
+\documentclass[a4paper]{article}
+\usepackage{tabularx} % extra features for tabular environment
+\usepackage{amsmath}  % improve math presentation
+\usepackage{graphicx} % takes care of graphic including machinery
+%\usepackage[margin=1in,letterpaper]{geometry} % decreases margins
+\usepackage{cite} % takes care of citations
+%\usepackage[final]{hyperref} % adds hyper links inside the generated pdf file
+%\hypersetup{
+%	colorlinks=true,       % false: boxed links; true: colored links
+%	linkcolor=blue,        % color of internal links
+%	citecolor=blue,        % color of links to bibliography
+%	filecolor=magenta,     % color of file links
+%	urlcolor=blue
+%}
+%++++++++++++++++++++++++++++++++++++++++
+\usepackage{indentfirst}
+\usepackage{tensor}
+\usepackage{amssymb}
+\allowdisplaybreaks
+\usepackage{bm}
+\newcommand{\at}[2][]{#1|_{#2}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\title{Atari Breakout with $\text{LTL}_f/\text{LDL}_f$ Goals\\(draft)}
+\author{Ivan Bergonzani, Michele Cipriano, Armando Nania}
+\date{\today}
+\maketitle
+
+%\begin{abstract}
+%In this experiment we studied a very important physical effect by measuring the
+%dependence of a quantity $V$ of the quantity $X$ for two different sample
+%temperatures.  Our experimental measurements confirmed the quadratic dependence
+%$V = kX^2$ predicted by Someone's first law. The value of the %mystery parameter
+%$k = 15.4\pm 0.5$~s was extracted from the fit. This value is
+%not consistent with the theoretically predicted $k_{theory}=17.34$~s. We attribute this
+%discrepancy to low efficiency of our $V$-detector.
+%\end{abstract}
+
+
+\section{Introduction}
+
+General overview of the project, what has been implemented,
+etc.
+
+\section{Conclusion}
+Summary of the project, possible future developments and
+conclusions.
+
+%++++++++++++++++++++++++++++++++++++++++
+% References section will be created automatically
+% with inclusion of "thebibliography" environment
+% as it shown below. See text starting with line
+% \begin{thebibliography}{99}
+% Note: with this approach it is YOUR responsibility to put them in order
+% of appearance.
+
+\bibliography{bibliography}
+\bibliographystyle{ieeetr}
+
+%\begin{thebibliography}{99}
+
+%\bibitem{melissinos}
+%A.~C. Melissinos and J. Napolitano, \textit{Experiments in Modern Physics},
+%(Academic Press, New York, 2003).
+
+%\bibitem{Cyr}
+%N.\ Cyr, M.\ T$\hat{e}$tu, and M.\ Breton,
+% "All-optical microwave frequency standard: a proposal,"
+%IEEE Trans.\ Instrum.\ Meas.\ \textbf{42}, 640 (1993).
+
+%\bibitem{Wiki} \emph{Expected value},  available at
+%\texttt{http://en.wikipedia.org/wiki/Expected\_value}.
+
+%\end{thebibliography}
+
+
+\end{document}
