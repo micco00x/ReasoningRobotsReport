@@ -27,10 +27,60 @@
 
 \begin{document}
 
-\title{Atari Breakout with $\text{LTL}_f/\text{LDL}_f$ Goals\\(draft)}
-\author{Ivan Bergonzani, Michele Cipriano, Armando Nania}
-\date{\today}
-\maketitle
+\title{Atari Breakout with\\$\text{LTL}_f/\text{LDL}_f$ Goals}
+%\author{Ivan Bergonzani, Michele Cipriano, Armando Nania}
+%\date{\today}
+%\maketitle
+
+
+\makeatletter
+\let\thetitle\@title
+\let\theauthor\@author
+\let\thedate\@date
+\makeatother
+
+\begin{titlepage}
+	\centering
+    \vspace*{0.5 cm}
+    \includegraphics[scale = 0.75]{images/SapienzaLogo}\\[1.0 cm]	% University Logo
+
+    \vspace*{-0.3cm}
+    \textsc{\large Department of Computer, Control and\\Management Engineering}\\[2.0 cm]	% Department Name
+    \vspace*{1.2cm}
+
+    { \fontsize{20.74pt}{18.5pt}\selectfont\bfseries \thetitle \par } % title
+
+    \vspace*{0.1cm}
+    \textsc{\Large Elective in Artificial Intelligence:\\Reasoning Robots}\\[0.5 cm] % course name
+
+    \vspace*{2.8cm}
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+			\emph{Professor:}\\
+			Giuseppe De Giacomo\\
+            %Computer Science Department\\
+		\end{flushleft}
+	\end{minipage}~
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushright} \large
+			\emph{Students:} \\
+            Ivan Bergonzani \\
+			Michele Cipriano\\
+            Armando Nania
+            %Semester\\
+		\end{flushright}
+
+	\end{minipage}\\[2 cm]
+
+    \vspace{0.2cm}
+    \rule{\linewidth}{0.2 mm} \\[0.3 cm]
+    \vspace*{-0.3cm}
+    Academic Year 2017/2018
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
 
 %\begin{abstract}
 %In this experiment we studied a very important physical effect by measuring the
@@ -44,13 +94,55 @@
 
 
 \section{Introduction}
+Introduction to the whole project, structure of the report and summary of
+the work.
 
-General overview of the project, what has been implemented,
-etc.
+\clearpage
+\section{Reinforcement Learning}
+Introduction to RL.
 
+\subsection{Q-Learning}
+Q-Learning algorithm.
+
+\subsection{SARSA}
+SARSA algorithm.
+
+\clearpage
+\section{$\text{LTL}_f/\text{LDL}_f$ Non-Markovian Rewards}
+Introduction to the research paper and how can it be used to train
+a RL model.
+
+\clearpage
+\section{OpenAI Gym}
+Introduction to the framework.
+
+Examples.
+
+\clearpage
+\section{ATARI Breakout}
+Original implementation of the paper (non-ATARI).
+
+ATARI Breakout and differences from the other one.
+
+Results with 6x18 non-ATARI Breakout (+CODE).
+
+Results with our experiments (+CODE).
+
+\texttt{RobotFeatureExtractor} (OpenCV).
+
+\texttt{GoalFeatureExtractor} (OpenCV).
+
+\texttt{*Ext} used to improve implementation.
+
+$\text{LTL}_f/\text{LDL}_f$ implementation (with Marco Favorito libraries).
+
+\clearpage
 \section{Conclusion}
-Summary of the project, possible future developments and
-conclusions.
+Why it does not work.
+
+Summary + differences between the two environments.
+
+Future works (neural networks and parallel computation).
 
 %++++++++++++++++++++++++++++++++++++++++
 % References section will be created automatically
@@ -60,6 +152,7 @@ conclusions.
 % Note: with this approach it is YOUR responsibility to put them in order
 % of appearance.
 
+\clearpage
 \bibliography{bibliography}
 \bibliographystyle{ieeetr}
 
