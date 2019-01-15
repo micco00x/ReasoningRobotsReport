@@ -81,6 +81,10 @@ emphstyle={\color{self}\slshape},
 \linespread{1.3}
 % Python code [end].
 
+\usepackage{caption}
+\captionsetup[lstlisting]{font={small}}
+\renewcommand{\lstlistingname}{Algorithm}
+
 \begin{document}
 
 \title{Atari Breakout with\\$\text{LTL}_f/\text{LDL}_f$ Goals}
@@ -159,11 +163,13 @@ Introduction to RL.
 
 \subsection{Q-Learning}
 Q-Learning algorithm.
-\lstinputlisting[language=Python]{implementation/TDBrain-QLearning.py}
+\lstinputlisting[caption=Q-Learning algorithm Python implementation.,
+    language=Python]{implementation/TDBrain-QLearning.py}
 
 \subsection{SARSA}
 SARSA algorithm.
-\lstinputlisting[language=Python]{implementation/TDBrain-Sarsa.py}
+\lstinputlisting[caption=SARSA algorithm Python implementation.,
+    language=Python]{implementation/TDBrain-Sarsa.py}
 
 \clearpage
 \section{$\text{LTL}_f/\text{LDL}_f$ Non-Markovian Rewards}
@@ -196,16 +202,19 @@ ATARI Breakout (from ALE) and differences from the other one.
 \subsection{Implementation}
 \texttt{RobotFeatureExtractor} (OpenCV). Extracts features of the robot (robot
 and ball positions).
-\lstinputlisting[language=Python]{implementation/breakoutfull-breakoutrobotfeatureextractor.py}
+\lstinputlisting[caption=Robot feature extractor Python implementation.,
+    language=Python]{implementation/breakoutfull-breakoutrobotfeatureextractor.py}
 
 \texttt{GoalFeatureExtractor} (OpenCV). Extracts 6x18 table representation
 of the bricks in order to evaluate a formula.
-\lstinputlisting[language=Python]{implementation/breakoutfull-breakoutgoalfeatureextractor.py}
+\lstinputlisting[caption=Goal feature extractor Python implementation.,
+    language=Python]{implementation/breakoutfull-breakoutgoalfeatureextractor.py}
 
 \texttt{*Ext} used to improve implementation.
 
 $\text{LTL}_f/\text{LDL}_f$ implementation (with Marco Favorito libraries).
-\lstinputlisting[language=Python]{implementation/breakoutfull-breakoutcompleterowstemporalevaluator.py}
+\lstinputlisting[caption=$\text{LTL}_f/\text{LDL}_f$ formulas Python implementation.,
+    language=Python]{implementation/breakoutfull-breakoutcompleterowstemporalevaluator.py}
 
 Atari wrappers (OpenAI).
 
