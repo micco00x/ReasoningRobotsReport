@@ -1,0 +1,44 @@
+\section{Reinforcement Learning}
+Reinforcement learning \cite{Suttonrl18} is an area of machine learning
+which aims at studying how to to develop agents that can interact with
+their environment maximing a cumulative reward. The environment can be
+formally defined as a Markov Decision Process (MDP), which is a tuple
+$\langle S, A, \delta, R \rangle$ where $S$ is a finite state of states that can represent
+the environment, $A$ is a finite state of actions that can be perform by
+the agent in the environment, $\delta$ is a probability function modeling
+the transition from a state to another when performing a certain action and
+$R$ is a reward function which models the reward received by the environment
+when performing a certain action which makes the agent move from a state
+to another.
+
+An interesting property of the MDP is that it satisfies the Markov property,
+hence, the future states that will be reached by the agent do not depend
+on the past interaction of the environment, but just on the current state.
+This makes it possbile to define the transition and the reward function
+depending only on the current state (and of course the action and the future
+state of interest).
+
+This section considers two common reinforcement learning algorithm,
+namely Q-Learning and SARSA, which have been used in our experiments
+in order to train an agent interacting with an Atari Breakout environment
+(section \ref{subsec:experiments}).
+
+\subsection{Q-Learning}
+Q-Learning algorithm.
+\begin{equation}
+    Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \Big[ R_{t+1} +
+        \gamma \max_{a} Q(S_{t+1}, A_t) - Q(S_t, A_t) \Big]
+\end{equation}
+
+\lstinputlisting[caption=Q-Learning algorithm Python implementation.,
+    language=Python]{implementation/TDBrain-QLearning.py}
+
+\subsection{SARSA}
+SARSA algorithm.
+\begin{equation}
+    Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \Big[ R_{t+1} +
+        \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) \Big]
+\end{equation}
+
+\lstinputlisting[caption=SARSA algorithm Python implementation.,
+    language=Python]{implementation/TDBrain-Sarsa.py}

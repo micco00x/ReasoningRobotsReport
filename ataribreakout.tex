@@ -1,0 +1,38 @@
+\section{Atari Breakout}
+Intro.
+
+\subsection{PyGame Breakout}
+Original implementation of the paper (non-ATARI).
+
+\subsection{Arcade Learning Environment}
+ATARI Breakout (from ALE) and differences from the other one.
+
+\subsection{Implementation}
+Intro to implementation.
+
+\subsubsection{Robot Features Extractor}
+\texttt{RobotFeatureExtractor} (OpenCV). Extracts features of the robot (robot
+and ball positions).
+\lstinputlisting[caption=Robot feature extractor Python implementation.,
+    language=Python]{implementation/breakoutfull-breakoutrobotfeatureextractor.py}
+
+\subsubsection{Goal Features Extractor}
+\texttt{GoalFeatureExtractor} (OpenCV). Extracts 6x18 table representation
+of the bricks in order to evaluate a formula.
+\lstinputlisting[caption=Goal feature extractor Python implementation.,
+    language=Python]{implementation/breakoutfull-breakoutgoalfeatureextractor.py}
+
+\texttt{*Ext} used to improve implementation.
+
+\subsubsection{Temporal Goals}
+$\text{LTL}_f/\text{LDL}_f$ implementation (with Marco Favorito libraries).
+\lstinputlisting[caption=$\text{LTL}_f/\text{LDL}_f$ formulas Python implementation.,
+    language=Python]{implementation/breakoutfull-breakoutcompleterowstemporalevaluator.py}
+
+Atari wrappers (OpenAI).
+
+\subsection{Experiments}
+\label{subsec:experiments}
+Results with 6x18 non-ATARI Breakout (+CODE).
+
+Results with our experiments (+CODE).
