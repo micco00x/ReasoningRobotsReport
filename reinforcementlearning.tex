@@ -24,21 +24,55 @@ in order to train an agent interacting with an Atari Breakout environment
 (section \ref{subsec:experiments}).
 
 \subsection{Q-Learning}
-Q-Learning algorithm.
+Q-Learning is an temporal difference (TD) algorithm that directly approximates
+the optimal action-value
+function. This method guarantees to find an optimal behaviour under the
+assumption that the all state-action pairs are updated infinitely many times. It is
+defined \cite{Suttonrl18} by the following equation:
 \begin{equation}
+    \label{eq:qlearning-update-function}
     Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \Big[ R_{t+1} +
-        \gamma \max_{a} Q(S_{t+1}, A_t) - Q(S_t, A_t) \Big]
+        \gamma \max_{a} Q(S_{t+1}, a) - Q(S_t, A_t) \Big]
 \end{equation}
 
+Let's briefly discuss the implementation used in our project by studying
+the Python implementation (Algorithm \ref{lst:qlearning-py}). The algorithm
+is defined by the class \texttt{QLearning} that extends the abstract class
+\texttt{TDBrain}. The constructor of the class (lines 2-4) simply calls its
+parent constructor that will initialize the parameters of the object, hence,
+the observation space and the action space (\texttt{gym} objects), the strategy
+used by the policy function, which is $\varepsilon$-greedy by default and the
+hyperparameters $\gamma$, $\alpha$ and $\lambda$ of the upper class.
+The abstract method inherited from \texttt{TDBrain} is \texttt{update\_Q},
+which should be implemented in order to define how to update the action-state
+table. The method (lines 6-21) simply follows Eq.
+\ref{eq:qlearning-update-function}. TODO: eligibility.
 \lstinputlisting[caption=Q-Learning algorithm Python implementation.,
+    label={lst:qlearning-py},
     language=Python]{implementation/TDBrain-QLearning.py}
 
 \subsection{SARSA}
-SARSA algorithm.
+A similar TD algorithm is the SARSA algorithm, which name
+comes from the fact that at each timestep a quintuple $\langle S_t, A_t,
+R_{t+1}, S_{t+1}, A_{t+1} \rangle$ is considered. As before, SARSA converges
+to an optimal action-value function under the assumption that all state-action
+pairs are updated infinitely many times. It is defined
+\cite{Suttonrl18} by the following equation:
 \begin{equation}
+    \label{eq:sarsa-update-equation}
     Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha \Big[ R_{t+1} +
         \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) \Big]
 \end{equation}
 
+Let's briefly discuss the implementation used in our project by studying the
+implementation (Algorithm \ref{lst:sarsa-py}), as done before with the
+Q-Learning algorithm. Again, the algorithm is defined by the class
+\texttt{Sarsa} that extends the abstract class \texttt{TDBrain}. The constructor
+of the class (lines 2-4) calls its parent constructor initializing the
+parameters of the upper class exactly in the same way as the class
+\texttt{QLearning}. The class implements the inherited method
+\texttt{update\_Q} by following Eq. \ref{eq:sarsa-update-equation} (lines
+6-17). TODO: eligibility.
 \lstinputlisting[caption=SARSA algorithm Python implementation.,
+    label={lst:sarsa-py},
     language=Python]{implementation/TDBrain-Sarsa.py}
