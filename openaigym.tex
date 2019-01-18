@@ -30,7 +30,7 @@ The description will follow Algorithm \ref{lst:gym-breakout-example-py}.
 
 Initially (line 1) the framework is imported. Then (line 3-4) an environment
 is created specifying its name and initializing it. The program makes a
-random agent interact randomly with the environment for 1000 episodes (lines
+random agent interact randomly with the environment for 1000 timesteps (lines
 6-11) before closing the environment. Line 7 renders the current
 observation of the environment on screen, line 8-9 performs a random action
 between those available in this Brekout version, note that the method
@@ -38,7 +38,7 @@ between those available in this Brekout version, note that the method
 \ref{fig:gym-breakout-image-example}), which is an array of pixels
 that represent the current state of the environment, a \texttt{reward},
 which is a value return by the game after performing the specified action
-\texttt{action}, a boolean value \texttt{done}, which is \texttt{True} is
+\texttt{action}, a boolean value \texttt{done}, which is \texttt{True} when
 the game is over, \texttt{False} otherwise, and \texttt{info} which contains
 extra information about the game. Lines 10-11 handles the case when the game
 is over, resetting the environment.
