@@ -55,10 +55,26 @@ further transform it into a MDP where it is possible to execute learning
 algorithms such as Q-learning. All the details are out of the scope of the
 project and are discussed in \cite{DBLP:journals/corr/abs-1807-06333}. The
 set of states $S$ is used to express low-level features of the agent.
+
+Once the MDP has been determined it is possible to train a model that will
+be able to manage non-Markovian rewards as well. Fig.
+\ref{fig:rl-temporalgoals-pipeline} shows a pipeline of the
+agent interacting with the world. In particular, a robot feature extractor
+will analyze the state of the world $w$ in order to pass a representation $s$ to the
+agent, a goal feature extractor will extract higher-level features of the world
+$l$
+that can be used to determine if a temporal goal has been achieved or not. In
+positive case a reward $r$ is given to the agent. The evaluation $q$ of the formula
+that specifies the temporal goals is given to the learning agent as well, in
+order to construct an extended state of the MDP as specified by the theory above.
+Each time the learning agent performs an action $a$, the environment changes
+and it gives to the agent a reward $R$.
 \begin{figure}
     \centering
     \includegraphics[width=0.85\textwidth]{images/rl-temporalgoals-pipeline.png}
-    \caption{TODO: description.}
+    \caption{Pipeline describing how the agent is interacting with the
+        world and how the robot features extractor and the goal features
+        extractor are used in order to handle non-Markovian rewards.}
     \label{fig:rl-temporalgoals-pipeline}
 \end{figure}
 
