@@ -26,22 +26,36 @@ reward given by the environment when performing a certain state-action
 sequence. Specifying a non-Markovian reward function explicitely is
 difficult even when considering a finite number of traces. Luckily, the
 $\text{LTL}_f/\text{LDL}_f$ formalism allows to specify $\bar{R}$
-implicitely using a set of pairs $\{ (\phi, r) \}$ with $\phi$ boolean
-proposition over the components of the state vector and $r$ such that,
+implicitely using a set of pairs $\{ (\phi_i, r_i) \}_{i=1}^m$ with
+$\phi_i$ boolean
+proposition over the components of the state vector and $r_i$ such that,
 given a current trace $\pi = \langle s_, a_1, \dots, s_{n-1}, a_n \rangle$,
-the agent receives at $s_n$ a reward $r$ if $\phi_i$ is satisfied by $\pi$,
+the agent receives at $s_n$ a reward $r_i$ if $\phi_i$ is satisfied by $\pi$,
 hence:
 \begin{equation}
     \bar{R}(\pi) =
         \begin{cases}
-            r & \text{if } pi \vDash \phi \\
+            r_i & \text{if } \pi \vDash \phi_i \\
             0 & \text{otherwise}
         \end{cases}
 \end{equation}
 
-
-Introduction to the research paper.
-\begin{figure}[h]
+Since the NMRDP rewards are based on traces, instead of state-action pairs,
+typical learning algorithms like Q-learning or SARSA cannot be used.
+Nevertheless, it has been shown \cite{DBLP:journals/corr/abs-1807-06333} that
+for any NMRDP $M = \langle S, A, \delta, \{ (\phi_i, r_i) \}_{i=1}^m \rangle$
+there exists an MDP $M' = \langle S', A', \delta' R' \rangle$ that is equivalent
+to $M$. The idea behind the proof consists in starting from an initial
+decision process $M_{ag}^{goal} = \langle S, A, R, \mathcal{L},
+\delta_{ag}^g, \{ (\phi_i, r_i) \}_{i=1}^m \rangle$ with
+$\text{LTL}_f/\text{LDL}_f$ goals (with $\mathcal{L}$ set of of configuration
+of the high-level features needed for expressing $\phi_i$),
+transform it into a NMRDP in order to
+further transform it into a MDP where it is possible to execute learning
+algorithms such as Q-learning. All the details are out of the scope of the
+project and are discussed in \cite{DBLP:journals/corr/abs-1807-06333}. The
+set of states $S$ is used to express low-level features of the agent.
+\begin{figure}
     \centering
     \includegraphics[width=0.85\textwidth]{images/rl-temporalgoals-pipeline.png}
     \caption{TODO: description.}
