@@ -3,4 +3,5 @@
 *.blg
 *.log
 *.toc
+*.out
 .DS_Store

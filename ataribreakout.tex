@@ -1,11 +1,68 @@
 \section{Atari Breakout}
-Intro.
+This section contains the main part of the project, describing in detail our
+starting point, how the program has been developed, the results achieved and the
+comparison with the original implementation, which uses a non-Atari version
+of the game Breakout \cite{DBLP:journals/corr/abs-1807-06333} with the same
+number of bricks used in the Atari implementation of \texttt{gym},
+already introduced in section \ref{sec:openaigym}.
+
+Initially, the non-Atari version of Breakout (built on PyGame) is introduced,
+its implementation is discussed and the results on the training with a brick
+matrix of dimension 6$\times$18 are presented. Then the \texttt{gym}
+environment \texttt{BreakoutNoFrameskip-v4} is presented and compared with the
+PyGame breakout. A detailed description of the implementation of the project
+is described, discussing in detail how the features have been extracted from
+the environment (both the robot and the goal features), how temporal goals
+have been used to evaluate the state of the bricks and how everything is
+connected together in order to make it work with \texttt{gym}. In the end,
+the main experiments performed on \texttt{BreakoutNoFrameskip-v4} are
+presented.
 
 \subsection{PyGame Breakout}
-Original implementation of the paper (non-ATARI).
+As introduced above, in \cite{DBLP:journals/corr/abs-1807-06333} a PyGame
+version of the Breakout game has been used in order to test the algorithms
+introduced in the paper. The implementation of this Breakout easily allows
+to determine the state of the environment, saving the status of the bricks
+(either in the scene or broken), the position of the ball, the direction of
+the ball and the position of the paddle. This makes it possible to reduce
+a lot the computational time of the implementation of the agent since the
+data it receives are already preprocessed in order to have a complete
+overview of the environment, allowing to focus on higher-level reasoning
+tasks.
+
+Originally, the paper focused on a Breakout environment with a brick matrix
+of dimension 4$\times$5. Since the Atari version of Breakout is dealing with
+a brick matrix of dimension 6$\times$18, a new test has been performed to
+make the two environments comparable, in order to better understand the
+potentiality of $\text{LTL}_f/\text{LDL}_f$, the use of non-Markovian rewards
+and how to approach complex \texttt{gym} environments in the future.
+
+The method managed to correctly break all the bricks in around one hour of
+training. TODO: add three figures with initial state, middle, final.
+TODO: add plot of rewards (shall this go to Experiments subsec?).
 
 \subsection{Arcade Learning Environment}
-ATARI Breakout (from ALE) and differences from the other one.
+This works aims at comparing the \texttt{gym} environment
+\texttt{BreakoutNoFrameskip-v4}, already introduced in section
+\label{sec:openaigym} with the non-Atari Breakout used in
+\cite{DBLP:journals/corr/abs-1807-06333}. In last years, the reinforcement
+learning community has grown a lot thanks to the introduction of \texttt{gym}
+and deep reinforcement learning algorithms \cite{mnih2015humanlevel} that
+managed to easily solve complex games that are considered difficult also
+for humans, often achieving better results than expert human gamers. More
+and more algorithms are introduced every year, exploiting GPU resources
+and managing to solve harder games like Montezuma Revenge \cite{uber-goexplore}.
+The popularity of deep reinforcement learning begun with the introduction of
+Arcade Learning Environment (ALE) that includes most
+famous arcade Atari games \cite{bellemare13arcade}.
+
+The main characteristics of \texttt{gym} (or ALE) environments is that the
+world can be observed only from the pixels of the screen, putting the
+algorithms at the same level of the human, that can only observe the display
+while playing. This makes the game a lot more complex since a more abstract
+reasoning strategy is needed in order to solve the game. This hypothesis should
+make \texttt{gym} games a lot harder than the non-Atari version of Breakout
+that has been used to test algorithms that work with non-Markovian rewards.
 
 \subsection{Implementation}
 Intro to implementation.
