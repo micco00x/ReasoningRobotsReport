@@ -56,6 +56,11 @@ algorithms such as Q-learning. All the details are out of the scope of the
 project and are discussed in \cite{DBLP:journals/corr/abs-1807-06333}. The
 set of states $S$ is used to express low-level features of the agent.
 
+The new MDP is extended by using automata needed to track the satisfiability
+of a $\text{LTL}_f/\text{LDL}_f$ formulas, as explained in
+\cite{DBLP:conf/aaai/2018}. Each formula is, hence, associated with an
+automaton that accepts exactly the traces satisfying the formula itself.
+
 Once the MDP has been determined it is possible to train a model that will
 be able to manage non-Markovian rewards as well. Fig.
 \ref{fig:rl-temporalgoals-pipeline} shows a pipeline of the
