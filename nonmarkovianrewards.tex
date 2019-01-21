@@ -79,4 +79,49 @@ and it gives to the agent a reward $R$.
 \end{figure}
 
 \subsection{Examples}
-How it can be used to train a RL model.
+A typical example is breaking the bricks of a theoretical Breakout game in a
+certain order. Let's consider a 3$\times$3 Breakout. A good idea is to use
+$\text{LTL}_f/\text{LDL}_f$ goals to help the agent break to bricks from top
+to bottom in order to make it create a hole on the left (or the right) and let
+the ball do all the job without making any movements when it reaches the top
+part of the environment. The idea is, hence, to help the agent learn
+the most effective strategy, which should also decrease the training time.
+Let's consider a formula that checks weather a row has been broken or not:
+\begin{align}
+\begin{split}
+    \langle&(\neg\varphi_0 \land \neg\varphi_1 \land \neg\varphi_2)^*;
+        (\varphi_0 \land \neg\varphi_1 \land \neg\varphi_2);
+        (\varphi_0 \land \neg\varphi_1 \land \neg\varphi_2)^*;\\
+        &(\varphi_0 \land \varphi_1 \land \neg\varphi_2);
+        (\varphi_0 \land \varphi_1 \land \neg\varphi_2)*;
+        (\varphi_0 \land \varphi_1 \land \varphi_2)\rangle tt
+\end{split}
+\end{align}
+
+\noindent which, given $\varphi_0$ first row from the top broken,
+$\varphi_1$ second row from the top broken and $\varphi_2$ third row from the
+top broken, can be interpreted as:
+\begin{itemize}
+    \item $(\neg\varphi_0 \land \neg\varphi_1 \land \neg\varphi_2)^*$:
+        initially, and for an indefinite amout of time, none of the rows have
+        been broken;
+    \item $(\varphi_0 \land \neg\varphi_1 \land \neg\varphi_2)$: then,
+        the first row from the top has been broken but the remaining two
+        are intact;
+    \item $(\varphi_0 \land \neg\varphi_1 \land \neg\varphi_2)^*$: then,
+        for an indefinite amount of time, the first row remains broken
+        and the remaining two remain intact;
+    \item $(\varphi_0 \land \varphi_1 \land \neg\varphi_2)$: then,
+        the first two rows from the top have been broken and the remaining
+        one at the bottom is intact;
+    \item $(\varphi_0 \land \varphi_1 \land \neg\varphi_2)*$: then,
+        for an indefinite amount of time, the first two rows from the top
+        remain broken and the last one remain instact;
+    \item $(\varphi_0 \land \varphi_1 \land \varphi_2)$: in the end,
+        all the rows have been broken, hence, all the bricks have been broken.
+\end{itemize}
+
+In general, the formula $\langle\rho\rangle\phi$ states that, from the current step in
+the trace, there exists an execution satifying $\rho$ such that in its last
+step $\phi$ is satisfied. In the example above, at the end of the execution all
+the rows have been broken.
