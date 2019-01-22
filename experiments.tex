@@ -57,13 +57,49 @@ The problem of the size of the state space was clear from the beginning. Before 
 
 \subsubsection{The Local Maximum Problem}
 
-The artificial intelligence algorithm that must learn to maximize the reward must face a problem of local maximum. In fact, there are many states from which it is difficult to escape. Take the case in which the paddle hits the ball in the lower left corner. If the ball tends to go to the right as a result of the action, there is the possibility that it will fall back into the opposite corner, lower right. If this is the case, the paddle will have to move multiple times, before it can get a new reward. In particular, we need a series of subsequent "go right" actions, which make it possible to continue the game. This is very unlikely, because, in the presence of new states, the choice of action to be taken is random. And there's a second problem: the difficulty introduced by a greater number of possible actions: while on PyGame there are only three actions ("go left", "go right", "stay still"), on Atari there is a fourth possible action, which is needed to spawn the ball at the start of the game, or when a life is lost. This action is automatically performed by the environment on the aforementioned occasions, but it has not been possible to prevent the execution of these actions during the normal course of the game. So the correct action to be taken ("go right") must be chosen randomly by a group of 4 actions (25\% probability of choosing the correct action) instead of 3 (33\%). And if, say, the number of times to perform the "go right" action is N, the probability of this happening is $25\%^N$ EPSILON, which falls below 1\% already for N = 4. If we analyze the moments in which the paddle drops the ball in the training carried out, we note that most of them are just the cases described here, in which the paddle is in a corner of the screen and does not move, sign that no rewards have been discovered for any action, and the ball falls in the opposite corner.
+The artificial intelligence algorithm that must learn to maximize the reward
+must face a problem of local maximum. In fact, there are many states from
+which it is difficult to escape. Take the case in which the paddle hits the
+ball in the lower left corner. If the ball tends to go to the right as a result
+of the action, there is the possibility that it will fall back into the
+opposite corner, lower right. If this is the case, the paddle will have to move
+multiple times, before it can get a new reward. In particular, we need a series
+of subsequent ``go right'' actions, which make it possible to continue the game.
+This is very unlikely, because, in the presence of new states, the choice of
+action to be taken is random. And there's a second problem: the difficulty
+introduced by a greater number of possible actions: while on PyGame there are
+only three actions (``go left'', ``go right'', ``stay still''), on Atari there is a
+fourth possible action, which is needed to spawn the ball at the start of the
+game, or when a life is lost. This action is automatically performed by the
+environment on the aforementioned occasions, but it has not been possible to
+prevent the execution of these actions during the normal course of the game.
+So the correct action to be taken (``go right'') must be chosen randomly by a
+group of 4 actions (25\% probability of choosing the correct action) instead
+of 3 (33\%). And if, say, the number of times to perform the ``go right'' action
+is N, the probability of this happening is $25\%^N$ EPSILON, which falls below
+1\% already for N = 4. If we analyze the moments in which the paddle drops the
+ball in the training carried out, we note that most of them are just the cases
+described here, in which the paddle is in a corner of the screen and does not
+move, sign that no rewards have been discovered for any action, and the ball
+falls in the opposite corner.
 
 \smallskip
 TODO: sequenza immagini palla che cade
 \smallskip
 
-But we have found a trick to alleviate this problem. By default, Atari returns an observation every 4 frames, and for each of those frames Atari performs the same action we told it to execute. In practice a state-frame corresponds to 4 game-frame: at each state-frame the AI ​​chooses an action that will be performed for 4 game-frames, after which the environment will return a new observation, that is a new state-frame. Increasing this number increases the number of times the same action is performed, increasing the paddle movement from one state-frame to another. This allows you to choose the same action for fewer times in order to reach the opposite corner of the screen. That is, it reduces N, thereby increasing the probability of this happening ($25\%^{N}$). On the other hand, this makes it more difficult to hit the ball. Tests were performed and optimal intermediate values ​​were found for the frame skip, between 10 and 14, which lead to a good increase in the score.
+But we have found a trick to alleviate this problem. By default, Atari returns
+an observation every 4 frames, and for each of those frames Atari performs the
+same action we told it to execute. In practice a state-frame corresponds to 4
+game-frame: at each state-frame the AI chooses an action that will be performed
+for 4 game-frames, after which the environment will return a new observation,
+that is a new state-frame. Increasing this number increases the number of times
+the same action is performed, increasing the paddle movement from one
+state-frame to another. This allows you to choose the same action for fewer
+times in order to reach the opposite corner of the screen. That is, it
+reduces N, thereby increasing the probability of this happening ($25\%^{N}$).
+On the other hand, this makes it more difficult to hit the ball. Tests were
+performed and optimal intermediate values were found for the frame skip,
+between 10 and 14, which lead to a good increase in the score.
 
 \subsubsection{The Non-Determinism Problem}
 
@@ -71,9 +107,38 @@ During the frame skip tests we noticed the problem that is the main difference b
 
 \subsubsection{The State Collision Problem}
 
-The most serious problem, however, is the one introduced by non-determinism: the collision of states, that is when two different states are represented in the same way by the AI. The introduction of the variable move serves precisely this, that is, to provide the algorithm of a sort of memory that indicates more or less what the previous state was and, consequently, help to predict the future state based on its own actions. However, this is not a definitive solution. Suppose in fact that move indicates that the paddle has moved an average amount between no movement (0) and maximum movement (6f). We do not know if the paddle was accelerating or braking. We do not know if the previous action was "stand still" and the paddle moved randomly by a lot, or if it was "go right" and the paddle randomly moved by a little bit. Suppose now that the AI ​​has learned that in a certain state, by performing a certain action, it will get a reward. What happens now if, during the training phase, the AI ​​meets again the same state encountered some frames before, but in a different circumstance? If the epsilon policy does not tell us to choose randomly, we will obviously do the same action as before, but the result may not be the same, we could lose the ball. Even worse is the case in which the epsilon policy tells us to perform a random action, different from the optimal one, but leads to a reward. In this case we are going to overwrite the information of the optimal action on that state and moreover, since this reward is more recent, it will have a higher value. So it will happen that, the next restart of the game, when we meet the first occurrence of the double state, the AI will perform the wrong action, losing not only the ball, but also all the rewards we would have obtained following that path of actions leading to the second occurrence of the state, the very same path that we had already explored at the cost of so many clock cycles. Furthermore, the greater the distance between the two occurrences of the conflicting state, the greater the loss of rewards. This explains the fluctuating trend of the score during the training phase, which is notably different from the PyGame case. So this is the main reason for the difficulty of applying the Q-Learning or SARSA algorithms on Atari Breakout.
+The most serious problem, however, is the one introduced by non-determinism:
+the collision of states, that is when two different states are represented in
+the same way by the AI. The introduction of the variable move serves precisely
+this, that is, to provide the algorithm of a sort of memory that indicates
+more or less what the previous state was and, consequently, help to predict
+the future state based on its own actions. However, this is not a definitive
+solution. Suppose in fact that move indicates that the paddle has moved an
+average amount between no movement (0) and maximum movement (6f). We do not
+know if the paddle was accelerating or braking. We do not know if the previous
+action was ``stand still'' and the paddle moved randomly by a lot, or if it was
+``go right'' and the paddle randomly moved by a little bit. Suppose now that the
+AI has learned that in a certain state, by performing a certain action, it
+will get a reward. What happens now if, during the training phase, the AI
+meets again the same state encountered some frames before, but in a different
+circumstance? If the epsilon policy does not tell us to choose randomly,
+we will obviously do the same action as before, but the result may not be the
+same, we could lose the ball. Even worse is the case in which the epsilon
+policy tells us to perform a random action, different from the optimal one,
+but leads to a reward. In this case we are going to overwrite the information
+of the optimal action on that state and moreover, since this reward is more
+recent, it will have a higher value. So it will happen that, the next restart
+of the game, when we meet the first occurrence of the double state, the AI
+will perform the wrong action, losing not only the ball, but also all the
+rewards we would have obtained following that path of actions leading to the
+second occurrence of the state, the very same path that we had already explored
+at the cost of so many clock cycles. Furthermore, the greater the distance
+between the two occurrences of the conflicting state, the greater the loss of
+rewards. This explains the fluctuating trend of the score during the training
+phase, which is notably different from the PyGame case. So this is the main
+reason for the difficulty of applying the Q-Learning or SARSA algorithms on
+Atari Breakout.
 
 \smallskip
 TODO: grafici andamento reward per ogni iterazione, atari vs pygame
 \smallskip
-
