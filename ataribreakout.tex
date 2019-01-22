@@ -34,7 +34,7 @@ Originally, the paper focused on a Breakout environment with a brick matrix
 of dimension 4$\times$5. Since the Atari version of Breakout is dealing with
 a brick matrix of dimension 6$\times$18, a new test has been performed to
 make the two environments comparable, in order to better understand the
-potentiality of $\text{LTL}_f/\text{LDL}_f$, the use of non-Markovian rewards
+potentiality of $\text{LTL}_f\text{/LDL}_f$, the use of non-Markovian rewards
 and how to approach complex \texttt{gym} environments in the future.
 
 The method managed to correctly break all the bricks in around one hour of
@@ -64,26 +64,140 @@ reasoning strategy is needed in order to solve the game. This hypothesis should
 make \texttt{gym} games a lot harder than the non-Atari version of Breakout
 that has been used to test algorithms that work with non-Markovian rewards.
 
+\subsubsection{Atari Wrappers}
+TODO: Atari wrappers (OpenAI).
+
 \subsection{Implementation}
-Intro to implementation.
+Following the pipeline introduced in \cite{DBLP:journals/corr/abs-1807-06333}
+and described in Fig. \ref{fig:rl-temporalgoals-pipeline}, the robot features
+extractor, the goal features extractor and the temporal goals are described.
+In particular, their implementation makes use of OpenCV \cite{opencv-library}
+in order to deal
+with images easily and a Python implementation of FLLOAT \cite{python-flloat}
+to deal with $\text{LTL}_f\text{/LDL}_f$ formulas. Note that the abstract
+class \texttt{TemporalEvaluator} in Algorithm \ref{lst:temporal-goals-py}
+makes use of the libraries Pythomata \cite{pythomata} and RLTG \cite{rltg} to
+build automata from the desired $\text{LTL}_f\text{/LDL}_f$ formulas in order
+to make it possible to receive non-Markovian rewards.
 
 \subsubsection{Robot Features Extractor}
-\texttt{RobotFeatureExtractor} (OpenCV). Extracts features of the robot (robot
-and ball positions).
+The implementation of the robot features extractor is shown in Algorithm
+\ref{lst:robot-features-extractor-py}. The class extends the abstract class
+\texttt{BreakoutRobotFeatureExtractor}, which has been developed just to
+keep a consistent structure among other implementation of other robot features
+extractors. The class implements two methods: the constructor
+\texttt{__init__}, which takes as input a \texttt{gym} object defining the space
+of the observation, and the method \texttt{_extract}, which takes as input
+the observation \texttt{input} coming from the environment and a dictionary
+\texttt{kwargs} containing other optional parameters.
+
+The constructor \texttt{__init__} defines the robot features space (lines 4-7)
+with two \texttt{gym.spaces.Discrete} objects defined with values 287 and
+157, respectively the maximum possible values (extreme excluded) that the
+position of the ball can have with respect to the paddle and the height of the
+ball. Then, internal representation of the position of the ball and of the
+paddle are initialized (lines 9-12). The boolean \texttt{self.still_image}
+is used to avoid repetitions of the same observation in the method
+\texttt{_extract} since the same observation is considered twice. In the end,
+the superconstructor is called (line 14) in order to finalize the
+construction of the object.
+
+The method \texttt{\_extract} checks weather the image has been already seen
+or not (lines 17-19) has explained above. Then, the position of the paddle
+is extracted from the observation (an image) on lines 20-35. Initially,
+only the bottom part of the image is extracted from the observation (line 21),
+it is then converted to a gray-scale image (line 22) so that it is possible
+to apply a threshold function in order to make the paddle white and the
+rest of the image black (line 23). In this way it is possible to find contours
+of the objects contained in that part of the image (there should be only
+one actually since only the bottom part is considered) and extract the centroid
+of the paddle, in this way the variable
+\texttt{paddleX} is updated. Similarly, the position of the ball is extracted
+(lines 37-69) from the upper part of the image. Here, it is important to
+actually check that the centroid is part of the ball since there could be
+objects that are part of the bricks. Fortunately the ball has a unique RGB color
+$(200, 72, 72)$ which simplifies this step.
+
+Finally, the internal representation of the object is updated (lines 71-73)
+and a tuple containing data specified in the constructor is returned (line 75).
 \lstinputlisting[caption=Robot feature extractor Python implementation.,
+    label={lst:robot-features-extractor-py},
     language=Python]{implementation/breakoutfull-breakoutrobotfeatureextractor.py}
 
 \subsubsection{Goal Features Extractor}
-\texttt{GoalFeatureExtractor} (OpenCV). Extracts 6x18 table representation
-of the bricks in order to evaluate a formula.
+The implementation of the goal features extractor is shown in Algorithm
+\ref{lst:goal-features-extractor-py}. The class extends the abstract class
+\texttt{FeatureExtractor}, which has been developed just to
+keep a consistent structure among other implementation of other goal features
+extractors. The class implements two methods: the constructor
+\texttt{__init__}, which takes as input a \texttt{gym} object defining the space
+of the observation and the number of rows and columns composing the bricks
+matrix, and the method \texttt{_extract}, which takes as input
+the observation \texttt{input} coming from the environment and a dictionary
+\texttt{kwargs} containing other optional parameters.
+
+The constructor \texttt{__init__} saves the number of rows and columns
+(lines 3-4) of the
+bricks matrix used in its internal representation and defines the space used
+by the method \texttt{_extract} to return objects (a simple representation
+of the bricks matrix). In the end, the superconstructor is called (line 6)
+in order to finalize the construction of the object.
+
+The method \texttt{\_extract} simply return a numpy representation of the
+bricks matrix seen from the observation, which is return by the environment
+each time the agent takes an action. The algorithm cycles on the pixels
+of the image representing the observation checking weather they are black
+or not. In particular, it is possible to determine this by checking the two
+pixels on the upper left and upper right part of the brick comparing their
+color (lines 10-20) with the background (black). If both of them are black, then the brick
+has already been destroyed, otherwise it is still present in the environment.
+Note that it is necessary to check both pixels because one of the two could
+be different due to the presence of the ball during the game. As mentioned
+above, the method return a 6$\times$18 numpy matrix representing the status of
+the bricks (each element will have value 0 if the brick has been destroyed,
+1 otherwise).
 \lstinputlisting[caption=Goal feature extractor Python implementation.,
+    label={lst:goal-features-extractor-py},
     language=Python]{implementation/breakoutfull-breakoutgoalfeatureextractor.py}
 
-\texttt{*Ext} used to improve implementation.
-
 \subsubsection{Temporal Goals}
-$\text{LTL}_f/\text{LDL}_f$ implementation (with Marco Favorito libraries).
-\lstinputlisting[caption=$\text{LTL}_f/\text{LDL}_f$ formulas Python implementation.,
-    language=Python]{implementation/breakoutfull-breakoutcompleterowstemporalevaluator.py}
+The implementation of temporal goals is shown in Algorithm
+\ref{lst:temporal-goals-py}. It is divided in three parts:
+\begin{itemize}
+    \item \texttt{get_breakout_lines_formula}: a function that determines the
+        $\text{LTL}_f\text{/LDL}_f$ formula as a string, in order to be
+        later parsed by the FLLOAT parser;
+    \item \texttt{BreakoutCompleteLinesTemporalEvaluator}: a
+        temporal evaluator class that handles rows and columns as lines;
+    \item \texttt{BreakoutCompleteRowsTemporalEvaluator}: a temporal evaluator
+        class that extends \texttt{BreakoutCompleteLinesTemporalEvaluator} and
+        work on rows, this is the main class used in the project regarding
+        temporal goals.
+\end{itemize}
 
-Atari wrappers (OpenAI).
+In particular, \texttt{get_breakout_lines_formula} (lines 1-15) generates a
+$\text{LTL}_f\text{/LDL}_f$ formula as explained in Section
+\ref{section:nonmarkovianrewards}, but extended to a general case of a Breakout
+consisting of a bricks matrix of size $n \times m$.
+
+\texttt{BreakoutCompleteLinesTemporalEvaluator} extends the RLTG abstract class
+\texttt{TemporalEvaluator} which contains the abstract method
+\texttt{fromFeaturesToPropositional}. Its constructor \texttt{__init__} (lines
+20-38) parses the $\text{LTL}_f\text{/LDL}_f$ specified by the function
+\texttt{get_breakout_lines_formula} (lines 22-30) in order to pass it to
+the superconstructor (lines 33-38) that will manage the construction of the
+automata using Pythomata and RLTG libraries. The method
+\texttt{fromFeaturesToPropositional}, inherited from \texttt{TemporalEvaluator},
+maps the bricks matrix to a propositional formula in order to update the
+automata while training the agent.
+
+\texttt{BreakoutCompleteRowsTemporalEvaluator} has the same structure of the
+previous class with the exception of the boolean \texttt{self.bottom_up} that
+specifies weather breaking the rows from top to bottom or viceversa.
+For all the experiments of the project this variable has been set to
+\texttt{False} in order to incite the agent to find a strategy that makes the
+ball go to the upper part of the environment in order to break the bricks
+without making any effort.
+\lstinputlisting[caption=$\text{LTL}_f\text{/LDL}_f$ formulas Python implementation.,
+    label={lst:temporal-goals-py},
+    language=Python]{implementation/breakoutfull-breakoutcompleterowstemporalevaluator.py}
