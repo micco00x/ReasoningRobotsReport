@@ -5,28 +5,81 @@ Although the algorithm applied to the PyGame version of Breakout gives
 excellent results, the same algorithm applied to the Atari version does not
 manage to solve the game correctly, without even satifying the first
 temporal goal.
-In this section we will analyze the results obtained, also showing a some (not all) of the tests that were carried out in an attempt to find out what was the cause of the intractability of Atari's environment. In particular, we will first show the results on PyGame and Atari environments, comparing them. Then we will explain the changes made to the PyGame version during the subsequent test phases. Finally we will draw conclusions from these experiments, analyzing in detail the problems encountered, and we will show some possible changes to be used to address these problems
+In this section we will analyze the results obtained, also showing some (not all) of the tests that were carried out in an attempt to find out what was the cause of the intractability of Atari's environment. In particular, we will first show the results on PyGame and Atari environments, comparing them. Then we will explain the changes made to the PyGame version during the subsequent test phases. Finally we will draw conclusions from these experiments, analyzing in detail the problems encountered, and we will show some possible changes to be used to address these problems.
+
+\begin{figure}
+\begin{subfigure}[h]{0.3\linewidth}
+\includegraphics[width=\linewidth]{images/atari-sequence-0.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.3\linewidth}
+\includegraphics[width=\linewidth]{images/atari-sequence-1.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.3\linewidth}
+\includegraphics[width=\linewidth]{images/atari-sequence-2.png}
+\end{subfigure}
+\caption{Sampled frames from the Atari Environment experiments}
+\label{fig:atari-sequence}
+\end{figure}
+
+\begin{figure}
+\begin{subfigure}[h]{0.8\linewidth}
+\includegraphics[width=\linewidth]{images/pygame-sequence-0.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.8\linewidth}
+\includegraphics[width=\linewidth]{images/pygame-sequence-1.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.8\linewidth}
+\includegraphics[width=\linewidth]{images/pygame-sequence-2.png}
+\end{subfigure}
+\caption{Sampled frames from the PyGame Environment experiments}
+\end{figure}
 
 \subsection{PyGame and Atari Results}
 
-The method applied to the environment of PyGame gives excellent results already from 50,000 training periods, while the results obtained by applying the same method to the Atari environment are lower, even after 1,000,000 epochs. These are the results of the method applied to the two environments:
+The method applied to the environment of PyGame gives excellent results already from 50,000 training periods, while the results obtained by applying the same method to the Atari environment are lower, even after 200,000 epochs. These are the results of the method applied to the two environments:
 
-\begin{table}
+\begin{table}[h]
 	\centering
 	\begin{tabular}{*{8}{c}}
 		Environment & Epochs & Explored States & Total Reward \\
 		\hline
-		Atari & 500,000 & 26,291 & 46 \\
-		Atari & 1,000,000 & 26,271 & 63 \\
+		Atari & 100,000 & 26,291 & 46 \\
+		Atari & 200,000 & 26,271 & 63 \\
 		\hline
 		PyGame & 50,000 & 91,821 & 1010 \\
 	\end{tabular}
 	\caption{Comparison of the results obtained. All the tests shown in the table were performed with the SARSA algorithm. The tests of the Q-Learning algorithm application did not show significant changes in the final results, therefore they were not shown. It is important to note that the reward is assigned differently in the two environments: PyGame returns a reward of 10 for the destruction of any brick. Atari, on the other hand, returns a reward equal to 1, 4 or 7 for the destruction of a brick, depending on the column in which the brick is located: the bricks higher up give a higher reward.}
 \end{table}
 
+\begin{figure}
+\begin{subfigure}[h]{0.5\linewidth}
+\includegraphics[width=\linewidth]{images/atari-sarsa-explored-states.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.5\linewidth}
+\includegraphics[width=\linewidth]{images/atari-sarsa-total-reward.png}
+\end{subfigure}
+\caption{Plots from the Atari Environment experiments. The reinforcement learning algorithm used in this experiment is SARSA.}
+\end{figure}
+
+\begin{figure}
+\begin{subfigure}[h]{0.5\linewidth}
+\includegraphics[width=\linewidth]{images/pygame-explored-states.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.5\linewidth}
+\includegraphics[width=\linewidth]{images/pygame-total-reward.png}
+\end{subfigure}
+\caption{Plots from the PyGame Environment experiments. The reinforcement learning algorithm used in this experiment is SARSA.}
+\end{figure}
+
 As you can see, the results are much lower in the second case. In an attempt to improve the Atari results, changes in the code have been tested: we have reduced the size of the state space, either the ball space or the paddle space, or its movement space; we have tried to completely remove the information concerning the movement of the paddle; we tested a one-shot version of Atari, in order to make it similar to PyGame and finally we have tried combinations of the above ones. These are the results of these tests:
 
-\begin{table}
+\begin{table}[h]
 	\centering
 	\begin{tabular}{*{8}{c}}
 		Ball X & Ball Y & Angle & Paddle & Move & Lives Count & Frame Skip & Score \\
@@ -183,3 +236,14 @@ rewards. This explains the fluctuating trend of the score during the training
 phase, which is notably different from the PyGame case. So this is the main
 reason for the difficulty of applying the Q-Learning or SARSA algorithms on
 Atari Breakout.
+
+\begin{figure}
+\begin{subfigure}[h]{0.5\linewidth}
+\includegraphics[width=\linewidth]{images/atari-ql-explored-states.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.5\linewidth}
+\includegraphics[width=\linewidth]{images/atari-ql-total-reward.png}
+\end{subfigure}
+\caption{Plots from the Atari Environment experiments. The reinforcement learning algorithm used in this experiment is Q-Learning.}
+\end{figure}
