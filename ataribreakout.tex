@@ -65,7 +65,30 @@ make \texttt{gym} games a lot harder than the non-Atari version of Breakout
 that has been used to test algorithms that work with non-Markovian rewards.
 
 \subsubsection{Atari Wrappers}
-TODO: Atari wrappers (OpenAI).
+Before introducing the main part of the implementation it is important to
+discuss the use of Atari wrappers, introduced with the OpenAI baselines
+\cite{openai-baselines}, that simplify the interaction with the environment,
+lightening the code and managing important aspects of the game.
+The wrappers used in the project, as it is possible to notice from Algorithm
+\ref{lst:run-atariwrappers-py}, are the following:
+\begin{itemize}
+    \item \texttt{EpisodicLifeEnv}: make an ``end of life'' be the end
+        of the episode resetting the environment only on the true
+        game over, this helps in value estimation;
+    \item \texttt{FireResetEnv}: use ``Fire'' as starting action in order
+        to launch the ball;
+    \item \texttt{MaxAndSkipEnv}: returns only the skip-th frame, this
+        reduces the amount of frame the agent has to deal with.
+\end{itemize}
+
+Note that line 1 defines the \texttt{gym} environment used in the project,
+namely \texttt{BreakoutNoFrameskip-v4}. All the wrappers extend the class
+\texttt{gym.Wrapper}.
+
+\lstinputlisting[caption={Initialization of the Atari Breakout environment
+    and the use of Atari wrappers from OpenAI.},
+    label={lst:run-atariwrappers-py},
+    language=Python]{implementation/breakoutfull-run-atariwrappers.py}
 
 \subsection{Implementation}
 Following the pipeline introduced in \cite{DBLP:journals/corr/abs-1807-06333}
