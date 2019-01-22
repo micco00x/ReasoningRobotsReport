@@ -1,11 +1,15 @@
 \section{Experiments}
 \label{subsec:experiments}
 
-The results are clear: the method is not efficient for the problem to be treated. Although the algorithm applied to the PyGame version of Breakout gives excellent results, the same algorithm applied to the Atari version does not give acceptable results, to the point that it was not even possible to test the temporal goals on the latter. In this section we will analyze the results obtained, also showing a some (not all) of the tests that were carried out in an attempt to find out what was the cause of the intractability of Atari's environment. In particular, we will first show the results on PyGame and Atari environments, comparing them. Then we will explain the changes made to the PyGame version during the subsequent test phases. Finally we will draw conclusions from these experiments, analyzing in detail the problems encountered, and we will show some possible changes to be used to address these problems
+Although the algorithm applied to the PyGame version of Breakout gives
+excellent results, the same algorithm applied to the Atari version does not
+manage to solve the game correctly, without even satifying the first
+temporal goal.
+In this section we will analyze the results obtained, also showing a some (not all) of the tests that were carried out in an attempt to find out what was the cause of the intractability of Atari's environment. In particular, we will first show the results on PyGame and Atari environments, comparing them. Then we will explain the changes made to the PyGame version during the subsequent test phases. Finally we will draw conclusions from these experiments, analyzing in detail the problems encountered, and we will show some possible changes to be used to address these problems
 
 \subsection{PyGame and Atari Results}
 
-As explained above, the results are very clear: the method applied to the environment of PyGame gives excellent results already from 5000 training periods, while the results obtained by applying the same method to the Atari environment are lower, even after 1,000,000 epochs. In particular, the best results obtained by PyGame are the following:
+The method applied to the environment of PyGame gives excellent results already from 5000 training periods, while the results obtained by applying the same method to the Atari environment are lower, even after 1,000,000 epochs. In particular, the best results obtained by PyGame are the following:
 
 \smallskip
 TODO: risultati su pygame
