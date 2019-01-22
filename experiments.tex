@@ -9,23 +9,45 @@ In this section we will analyze the results obtained, also showing a some (not a
 
 \subsection{PyGame and Atari Results}
 
-The method applied to the environment of PyGame gives excellent results already from 5000 training periods, while the results obtained by applying the same method to the Atari environment are lower, even after 1,000,000 epochs. In particular, the best results obtained by PyGame are the following:
+The method applied to the environment of PyGame gives excellent results already from 50,000 training periods, while the results obtained by applying the same method to the Atari environment are lower, even after 1,000,000 epochs. These are the results of the method applied to the two environments:
 
-\smallskip
-TODO: risultati su pygame
-\smallskip
-
-The results obtained from the use of the Atari environment are:
-
-\smallskip
-TODO: risultati su atari
-\smallskip
+\begin{table}
+	\centering
+	\begin{tabular}{*{8}{c}}
+		Environment & Epochs & Explored States & Total Reward \\
+		\hline
+		Atari & 500,000 & 26,291 & 46 \\
+		Atari & 1,000,000 & 26,271 & 63 \\
+		\hline
+		PyGame & 50,000 & 91,821 & 1010 \\
+	\end{tabular}
+	\caption{Comparison of the results obtained. All the tests shown in the table were performed with the SARSA algorithm. The tests of the Q-Learning algorithm application did not show significant changes in the final results, therefore they were not shown. It is important to note that the reward is assigned differently in the two environments: PyGame returns a reward of 10 for the destruction of any brick. Atari, on the other hand, returns a reward equal to 1, 4 or 7 for the destruction of a brick, depending on the column in which the brick is located: the bricks higher up give a higher reward.}
+\end{table}
 
 As you can see, the results are much lower in the second case. In an attempt to improve the Atari results, changes in the code have been tested: we have reduced the size of the state space, either the ball space or the paddle space, or its movement space; we have tried to completely remove the information concerning the movement of the paddle; we tested a one-shot version of Atari, in order to make it similar to PyGame and finally we have tried combinations of the above ones. These are the results of these tests:
 
-\smallskip
-TODO: risultati test
-\smallskip
+\begin{table}
+	\centering
+	\begin{tabular}{*{8}{c}}
+		Ball X & Ball Y & Angle & Paddle & Move & Lives Count & Frame Skip & Score \\
+		\hline
+		144 & 157 & 10 & 144 & 49 & 1 & 4 & 6 \\
+		144 & 157 & 10 & 144 & 49 & 5 & 4 & 4-20 \\
+		8 & 18 & 10 & 8 & 49 & 1 & 4 & 5 \\
+		144 & 157 & 10 & 144 & 10 & 1 & 4 & 7 \\
+		144 & 157 & 10 & 144 & 0 & 1 & 4 & 7 \\
+		144 & 157 & 10 & 144 & 0 & 5 & 4 & 2-16 \\
+		8 & 18 & 10 & 8 & 10 & 1 & 4 & 6 \\
+		8 & 18 & 10 & 8 & 0 & 1 & 4 & 2 \\
+		8 & 18 & 10 & 8 & 0 & 5 & 4 & 5-15 \\
+		\hline
+		144 & 157 & 10 & 144 & 13 & 5 & 14 & 19 \\
+		144 & 157 & 10 & 144 & 13 & 5 & 10 & 24 \\
+		144 & 157 & 10 & 144 & 13$^1$ & 5 & 10 & 16 \\
+		144 & 157 & 10 & 144 & 121 & 5 & 10 & 24 \\
+	\end{tabular}
+	\caption{The first five columns indicate the state space of the related variables, the sixth column indicates the number of lives per game, the sequential column indicates the number of game-frames for each state-frame (see point 6.3.2). The last column indicates the score at the end of the game, expressed as the number of bricks destroyed. In some cases (only those with more than one life) we have specified both the score at the end of the first life and the score at the end of the last life, separated by a dash. All tests were performed with 5000 training epochs. The results of these tests indicate that the score improves with the increase of the lives and the frame skip, with an optimal number of frame skip equal to 10 (not all the tests we performed have been included in this table), while the size of the state space has little influence on the score obtained. $^1$ This test was performed with the same hyperparameters as the previous test, but with a different calculation of the move variable: instead of distributing the 13 states of the move variable from -60 to +60 motion pixels, they were distributed over the range [-40 , +40], cropping excess values.}
+\end{table}
 
 Given the number of tests to be performed, we performed them with a low number of training periods, 5000, for obvious reasons of time. So it is necessary to take this data with a grain of salt. But it is still possible to see a trend: the reduction of the state space does not significantly improve the result you get, while giving Atari environment the opportunity to play all his 5 lives worsens the score obtained at the end of the first life, but increases the total score. This is a consequence of the fact that there are no penalties in the reward associated with losing a life: there are only positive rewards given by the destruction of a brick or the achievement of a temporal goal. This makes possible scenarios in which, after losing a life, the paddle succeeds in destroying a brick in the next life, which leads to a reward for the sequence of state-action pairs that led to that result. All this makes the training of AI very random, because the life in which it will take the reward is random, with the risk of losing lives uselessly. We will draw further conclusions later in this section.
 
@@ -33,21 +55,21 @@ Given the number of tests to be performed, we performed them with a low number o
 
 In the previous point we tried to identify strategies for managing the state space and lives to improve the score, but despite this the difference between the two environments is still large. It is true that PyGame Breakout has a very small state space, but nevertheless decreasing the state space in Atari Breakout to make it similar to PyGame does not produce any improvements. So instead of making Atari similar to PyGame, let's try to do the opposite. There are indeed considerable structural differences between the two environments: the size of paddle, ball, bricks, window and placements of objects in the field. Moreover, the movement of the ball is much slower in PyGame than in Atari: the ball, to reach the first bricks from the paddle, takes 35 frames in PyGame, and only 15 in Atari. In 1500 frames of PyGame it can only destroy 10 bricks, in 1500 frames of Atari it destroys 29 bricks, even 47 with 2000 frames! Remind that a frame corresponds to a state in which you choose an action to move to the next state. In order to better compare the two environments, in an attempt to understand the problems inherent to Atari, we gradually approximated PyGame to Atari, to make the two environments identical.
 
-\smallskip
-TODO: screen pygame vs atari
-\smallskip
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/modified-pygame-comparison.png}
+    \caption{Comparison between the Atari environment and the modified version of the PyGame environment}
+\end{figure}
 
 To do this we changed the PyGame code at some points. In doing so it was highlighted a bug that was already present in PyGame, but that did not show up in its original version:
 
-\smallskip
-TODO: codice correzione bug
-\smallskip
+\lstinputlisting[caption=A more sophisticated version of the ball rebound algorithm.,
+    language=Python]{implementation/Breakout-hit-detection-function.py}
 
 We quickly solved it and compared the two environments that we obtained. Despite all these efforts, the difference between the results obtained by applying the method on one environment rather than another is still large: the modified PyGame still manages to produce good results, event with just 5000 epochs of training. It has been noted, however, that PyGame uses an internal reduction of the actually used states: when the ball is lower in the screen, the ball and paddle positions are calculated with greater resolution. We tried to use this resolution reduction algorithm in Atari, but the results were once again disappointing. We even found a worsening effect of the score.
 
-\smallskip
-TODO: codice riduzione risoluzione
-\smallskip
+\lstinputlisting[caption=The resolution reduction algorithm inside the get state function.,
+    language=Python]{implementation/Breakout-get-state-function.py}
 
 After all these futile attempts we have finally managed to identify the problems of Atari, which are summarized in the next point.
 
@@ -87,9 +109,28 @@ described here, in which the paddle is in a corner of the screen and does not
 move, sign that no rewards have been discovered for any action, and the ball
 falls in the opposite corner.
 
-\smallskip
-TODO: sequenza immagini palla che cade
-\smallskip
+\begin{figure}
+\begin{subfigure}[h]{0.19\linewidth}
+\includegraphics[width=\linewidth]{images/frame-sequence-0.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.19\linewidth}
+\includegraphics[width=\linewidth]{images/frame-sequence-1.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.19\linewidth}
+\includegraphics[width=\linewidth]{images/frame-sequence-2.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.19\linewidth}
+\includegraphics[width=\linewidth]{images/frame-sequence-3.png}
+\end{subfigure}
+\hfill
+\begin{subfigure}[h]{0.19\linewidth}
+\includegraphics[width=\linewidth]{images/frame-sequence-4.png}
+\end{subfigure}
+\caption{Sequence of sampled frames}
+\end{figure}
 
 But we have found a trick to alleviate this problem. By default, Atari returns
 an observation every 4 frames, and for each of those frames Atari performs the
@@ -142,7 +183,3 @@ rewards. This explains the fluctuating trend of the score during the training
 phase, which is notably different from the PyGame case. So this is the main
 reason for the difficulty of applying the Q-Learning or SARSA algorithms on
 Atari Breakout.
-
-\smallskip
-TODO: grafici andamento reward per ogni iterazione, atari vs pygame
-\smallskip
