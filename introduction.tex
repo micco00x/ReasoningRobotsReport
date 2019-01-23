@@ -1,3 +1,26 @@
 \section{Introduction}
-Introduction to the whole project, structure of the report and summary of
-the work.
+The aim of the project is to extend the work introduced in
+\cite{DBLP:journals/corr/abs-1807-06333} testing the algorithms on a much
+harder environment, namely an Atari version of Breakout available in the
+\texttt{gym} framework.
+
+The report is structured in the following way. Section \ref{section:rl}
+introduces the basic theory behind reinforcement learning, briefly describing
+the Q-Learning and the SARSA algorithms, which have been used to train the
+agent in the experiments. Section \ref{section:nonmarkovianrewards}
+describes $\text{LTL}_f\text{/LDL}_f$ non-Markovian rewards and how they can
+be used to train a RL agent. Section \ref{sec:openaigym} describes the
+framework \texttt{gym} from OpenAI, which provides a level of abstraction
+on Arcade Learning Environment (ALE), which in turn provides a huge amount
+of classical Atari games. Section \ref{section:ataribreakout} discusses about
+the main implementation of the project, comparing the PyGame version of the
+Breakout game of the paper with one of the Atari Breakout versions of
+\texttt{gym}. Atari wrappers are introduced and robot features extractor,
+goal features extractor and temporal goals used in the implementation are
+presented in details. Section \ref{subsec:experiments} presents all the
+experiments performed during the development of the project, highlighting
+differences between the two environments discussed in the previous section
+and all the changes applied to both environments in order to better
+understand weaknesses from both parts. The report ends with the
+conclusion the summarizes the work done and discusses about possible
+future works.
