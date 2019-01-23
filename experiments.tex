@@ -44,7 +44,7 @@ In this section we will analyze the results obtained, also showing some (not all
 \end{figure}
 
 \subsection{PyGame and Atari Results}
-
+\label{subsec:pg-a-results}
 The method applied to the environment of PyGame gives excellent results already from 50,000 training periods, while the results obtained by applying the same method to the Atari environment are lower, even after 200,000 epochs. These are the results of the method applied to the two environments:
 
 \begin{table}[h]
@@ -139,7 +139,7 @@ After all these futile attempts we have finally managed to identify the problems
 
 \subsection{The Atari Breakout Difficulties}
 
-In this point we will analyze the intrinsic problems in Atari that prevent the achievement of good results with the method used. One has already been addressed in point 1, which concerned the use of an environment with more lives. Here we will describe the problems of the state space, of the local maximum, of non-determinism and of the collision of states.
+In this point we will analyze the intrinsic problems in Atari that prevent the achievement of good results with the method used. One has already been addressed in point \ref{subsec:pg-a-results}, which concerned the use of an environment with more lives. Here we will describe the problems of the state space, of the local maximum, of non-determinism and of the collision of states.
 
 \subsubsection{The Dimension Space Problem}
 
