@@ -1,7 +1,7 @@
 \section{$\text{LTL}_f\text{/LDL}_f$ Non-Markovian Rewards}
 \label{section:nonmarkovianrewards}
 Recently, non-Markovian reward decision processes (NMRDPs)
-has attracted interest in the scientific community because of the possibility
+have attracted interest in the scientific community because of the possibility
 of specifying them as MDPs with $\text{LTL}_f\text{/LDL}_f$ non-Markovian
 rewards \cite{DBLP:journals/corr/abs-1807-06333}. In particular, it is possible
 to model the problem with two separate representations of the world, one for
@@ -67,8 +67,7 @@ be able to manage non-Markovian rewards as well. Fig.
 \ref{fig:rl-temporalgoals-pipeline} shows a pipeline of the
 agent interacting with the world. In particular, a robot feature extractor
 will analyze the state of the world $w$ in order to pass a representation $s$ to the
-agent, a goal feature extractor will extract higher-level features of the world
-$l$
+agent, a goal feature extractor will extract higher-level features $l$ of the world
 that can be used to determine if a temporal goal has been achieved or not. In
 positive case a reward $r$ is given to the agent. The evaluation $q$ of the formula
 that specifies the temporal goals is given to the learning agent as well, in

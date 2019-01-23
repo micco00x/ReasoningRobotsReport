@@ -14,9 +14,7 @@ PyGame breakout. A detailed description of the implementation of the project
 is described, discussing in detail how the features have been extracted from
 the environment (both the robot and the goal features), how temporal goals
 have been used to evaluate the state of the bricks and how everything is
-connected together in order to make it work with \texttt{gym}. In the end,
-the main experiments performed on \texttt{BreakoutNoFrameskip-v4} are
-presented.
+connected together in order to make it work with \texttt{gym}.
 
 \subsection{PyGame Breakout}
 As introduced above, in \cite{DBLP:journals/corr/abs-1807-06333} a PyGame
@@ -37,14 +35,10 @@ make the two environments comparable, in order to better understand the
 potentiality of $\text{LTL}_f\text{/LDL}_f$, the use of non-Markovian rewards
 and how to approach complex \texttt{gym} environments in the future.
 
-The method managed to correctly break all the bricks in around one hour of
-training. TODO: add three figures with initial state, middle, final.
-TODO: add plot of rewards (shall this go to Experiments subsec?).
-
 \subsection{Arcade Learning Environment}
-This works aims at comparing the \texttt{gym} environment
+This work aims at comparing the \texttt{gym} environment
 \texttt{BreakoutNoFrameskip-v4}, already introduced in section
-\label{sec:openaigym} with the non-Atari Breakout used in
+\ref{sec:openaigym} with the non-Atari Breakout used in
 \cite{DBLP:journals/corr/abs-1807-06333}. In last years, the reinforcement
 learning community has grown a lot thanks to the introduction of \texttt{gym}
 and deep reinforcement learning algorithms \cite{mnih2015humanlevel} that
@@ -78,7 +72,8 @@ The wrappers used in the project, as it is possible to notice from Algorithm
     \item \texttt{FireResetEnv}: use ``Fire'' as starting action in order
         to launch the ball;
     \item \texttt{MaxAndSkipEnv}: returns only the skip-th frame, this
-        reduces the amount of frame the agent has to deal with.
+        reduces the amount of frame the agent has to deal with (set to 4
+        in the main experiments).
 \end{itemize}
 
 Note that line 1 defines the \texttt{gym} environment used in the project,
@@ -166,8 +161,8 @@ by the method \texttt{_extract} to return objects (a simple representation
 of the bricks matrix). In the end, the superconstructor is called (line 6)
 in order to finalize the construction of the object.
 
-The method \texttt{\_extract} simply return a numpy representation of the
-bricks matrix seen from the observation, which is return by the environment
+The method \texttt{\_extract} simply returns a numpy representation of the
+bricks matrix seen from the observation, which is in turn given by the environment
 each time the agent takes an action. The algorithm cycles on the pixels
 of the image representing the observation checking weather they are black
 or not. In particular, it is possible to determine this by checking the two

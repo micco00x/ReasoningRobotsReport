@@ -12,9 +12,9 @@ when performing a certain action which makes the agent move from a state
 to another.
 
 An interesting property of the MDP is that it satisfies the Markov property,
-hence, the future states that will be reached by the agent do not depend
+hence, future states that will be reached by the agent do not depend
 on the past interaction of the environment, but just on the current state.
-This makes it possbile to define the transition and the reward function
+This makes it possible to define the transition and the reward function
 depending only on the current state (and of course the action and the future
 state of interest).
 
@@ -27,7 +27,7 @@ in order to train an agent interacting with an Atari Breakout environment
 Q-Learning is a temporal difference (TD) algorithm that directly approximates
 the optimal action-value
 function. This method guarantees to find an optimal behaviour under the
-assumption that the all state-action pairs are updated infinitely many times. It is
+assumption that all the state-action pairs are updated infinitely many times. It is
 defined \cite{Suttonrl18} by the following equation:
 \begin{equation}
     \label{eq:qlearning-update-function}
@@ -46,7 +46,7 @@ hyperparameters $\gamma$, $\alpha$ and $\lambda$ of the upper class.
 The abstract method inherited from \texttt{TDBrain} is \texttt{update\_Q},
 which should be implemented in order to define how to update the action-state
 table. The method (lines 6-21) simply follows Eq.
-\ref{eq:qlearning-update-function}. TODO: eligibility.
+\ref{eq:qlearning-update-function}.
 \lstinputlisting[caption=Q-Learning algorithm Python implementation.,
     label={lst:qlearning-py},
     language=Python]{implementation/TDBrain-QLearning.py}
@@ -72,7 +72,7 @@ of the class (lines 2-4) calls its parent constructor initializing the
 parameters of the upper class exactly in the same way as the class
 \texttt{QLearning}. The class implements the inherited method
 \texttt{update\_Q} by following Eq. \ref{eq:sarsa-update-equation} (lines
-6-17). TODO: eligibility.
+6-17).
 \lstinputlisting[caption=SARSA algorithm Python implementation.,
     label={lst:sarsa-py},
     language=Python]{implementation/TDBrain-Sarsa.py}
