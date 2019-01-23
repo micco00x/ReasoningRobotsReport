@@ -1,6 +1,19 @@
 \section{Conclusion}
-Why it does not work.
-
-Summary + differences between the two environments.
-
-Future works (neural networks and parallel computation).
+The project presented an extension of the work introduced in
+\cite{DBLP:journals/corr/abs-1807-06333}, making experiments on an Atari
+Breakout version available in the \texttt{gym} framework. All the theory
+behind the work has been briefly introduced and all the main parts of the
+code have been discussed in detail, in order to simplify the analysis of the
+two environments used in the project. The best performance did not manage
+to correctly solve the Breakout game, suggesting that more work needs to be
+done on the extractors, in order to make them more reliable and fast,
+and on the learning algorithm. In fact, all the successful recent work
+managed to solve difficult Atari games using deep neural networks, which are
+able to generalize on the observation making the training much faster.
+Moreover, the training phase uses GPUs which make it possible to parallelize
+the computation, making the training even faster. More recent work
+use asynchronous methods \cite{DBLP:journals/corr/MnihBMGLHSK16} which manage
+to obtain great results without using the GPU. Working in this direction could
+help the agent in working for more episode in less time, discovering much
+better strategies and managing to interact with the environment in the best
+possible way, allowing the agent to work also with non-Markovian rewards.
